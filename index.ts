@@ -13,8 +13,36 @@ const app : Application = express()
 
 
 app.use(express.json())
-app.use(cors());
+const allowedOrigins = [
+  "https://medi-bridge-client.vercel.app",
+  "http://localhost:5173",
+  "http://localhost:5174",
+];
 
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      console.log("CORS Origin:", origin);
+
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(null, false);
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "authToken",
+    ],
+  })
+);
 app.get("/", (req : Request , res : Response)=>{  
     res.status(200).json({ success : true, message : "MediBridge Server running..."})
 })
