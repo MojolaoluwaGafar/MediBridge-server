@@ -32,6 +32,7 @@ app.use(express.json())
 //   })
 // );
 app.use(cors());
+
 app.get("/", (req : Request , res : Response)=>{  
     res.status(200).json({ success : true, message : "MediBridge Server running..."})
 })
