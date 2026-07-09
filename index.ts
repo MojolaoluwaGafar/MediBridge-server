@@ -15,6 +15,8 @@ const app : Application = express()
 app.use(express.json())
 const allowedOrigins = [
   "https://medi-bridge-client.vercel.app",
+  "https://medi-bridge-client-git-main-mojolaoluwa-gafars-projects.vercel.app",
+  "https://medi-bridge-client-58y7urxxy-mojolaoluwa-gafars-projects.vercel.app,"
   "http://localhost:5173",
   "http://localhost:5174",
 ];
