@@ -51,7 +51,7 @@ export function ActivationTemplate(firstName: string, code: string): string {
         <h2>Hello ${firstName},</h2>
         <p>Thank you for registering with <strong>MediBridge</strong>. To activate your account, please use the following 6‑digit code:</p>
         <div class="code-box">${code}</div>
-        <p>This code will expire in <strong>10 minutes</strong>. If you did not request this, please ignore this email.</p>
+        <p>This code will expire in <strong>5 minutes</strong>. If you did not request this, please ignore this email.</p>
         <p>Best regards,<br/>The MediBridge Team</p>
         <div class="footer">
           &copy; ${new Date().getFullYear()} MediBridge. All rights reserved.

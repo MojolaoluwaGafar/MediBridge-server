@@ -2,7 +2,12 @@ import express, { Application,Request, Response} from "express"
 import dotenv from 'dotenv'
 import cors from "cors"
 import connectDB from "./config/DB"
+import DepartmentRoutes from "./Routes/DepartmentRoutes"
 import Authroutes from "./Routes/AuthRoutes"
+import BookingRoutes from "./Routes/BookingRoutes"
+import DoctorsRoutes from "./Routes/DoctorsRoutes"
+import ActivityRoutes from "./Routes/ActivityRoutes"
+import SupportRoutes from "./Routes/SupportRoutes"
 dotenv.config()
 const app : Application = express()
 
@@ -30,6 +35,11 @@ app.get("/", (req : Request , res : Response)=>{
     res.status(200).json({ success : true, message : "MediBridge Server running..."})
 })
 app.use("/api/auth", Authroutes)
+app.use("/api", BookingRoutes)
+app.use("/api", DoctorsRoutes)
+app.use("/api", ActivityRoutes)
+app.use("/api", SupportRoutes)
+app.use("/api", DepartmentRoutes)
 
 const startServer = async () => {
     try {

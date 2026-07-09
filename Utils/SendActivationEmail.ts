@@ -1,7 +1,5 @@
-import {SendEmail} from "../Utils/SendMail"
+import { SendEmail } from "../Utils/SendMail"
 import { ActivationTemplate } from "../MailTemplates/Activate";
-
-
 
 export const sendActivationCode = (email: string, FirstName: string, code: string)=>{
     const subject = "Your Activation Code";
@@ -9,5 +7,3 @@ export const sendActivationCode = (email: string, FirstName: string, code: strin
 
    return SendEmail({ to : email, subject, html})
 }
-
-

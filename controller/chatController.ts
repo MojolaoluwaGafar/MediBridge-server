@@ -1,13 +1,10 @@
 import { Request, Response } from "express"
 import { sendToAI } from "../Services/ai"
-// import Flagged from "../models/Flagged";
-// import { getUnsafeReason } from "../utils/unsafe";
-// import { isEmergency } from "../utils/emergency";
+import Flagged from "../Models/Flagged";
+import { getUnsafeReason } from "../Utils/unsafe";
+import { isEmergency } from "../Utils/emergency";
 
 export const sendMessage = async (req: Request, res: Response) => {
-    // console.log("SEND MESSAGE HIT");
-    // console.log("SESSION:", (req as any).session);
-
   try {
     const { message } = req.body;
 
@@ -19,28 +16,28 @@ export const sendMessage = async (req: Request, res: Response) => {
     }
 
 
-    // const unsafeReason = getUnsafeReason(message);
-    // const emergency = isEmergency(message);
+    const unsafeReason = getUnsafeReason(message);
+    const emergency = isEmergency(message);
     
-    // if (emergency) {
-    //   await Flagged.create({
-    //     message,
-    //     reason: "Emergency Self-Harm Risk",
-    //   });
-    //   // console.log("emergency text from user :",emergency);
+    if (emergency) {
+      await Flagged.create({
+        message,
+        reason: "Emergency Self-Harm Risk",
+      });
+      // console.log("emergency text from user :",emergency);
       
-    //   const emergencyReply = "It sounds like you may be going through something very serious right now. Please reach out to a trusted adult, family member, local emergency service, or mental health professional immediately.";
+      const emergencyReply = "It sounds like you may be going through something very serious right now. Please reach out to a trusted adult, family member, local emergency service, or mental health professional immediately.";
             
-    //   return res.status(200).json({
-    //     reply: emergencyReply,
-    //   });
-    // }
-    // else if (unsafeReason) {
-    //   await Flagged.create({
-    //     message,
-    //     reason: unsafeReason,
-    //   });
-    // }
+      return res.status(200).json({
+        reply: emergencyReply,
+      });
+    }
+    else if (unsafeReason) {
+      await Flagged.create({
+        message,
+        reason: unsafeReason,
+      });
+    }
 
     const reply = await sendToAI(message);
 

@@ -1,4 +1,3 @@
-import { date } from './../node_modules/zod/src/v4/core/regexes';
 import mongoose, { Schema, Document } from "mongoose";
 import validator from "validator";
 
