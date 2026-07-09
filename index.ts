@@ -11,40 +11,51 @@ import SupportRoutes from "./Routes/SupportRoutes"
 dotenv.config()
 const app : Application = express()
 
-
 app.use(express.json())
+
+const configuredOrigins = (process.env.CORS_ORIGINS || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
 const allowedOrigins = [
+  ...configuredOrigins,
   "https://medi-bridge-client.vercel.app",
   "https://medi-bridge-client-git-main-mojolaoluwa-gafars-projects.vercel.app",
   "https://medi-bridge-client-58y7urxxy-mojolaoluwa-gafars-projects.vercel.app",
   "http://localhost:5173",
   "http://localhost:5174",
+  "http://localhost:3000",
 ];
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      console.log("CORS Origin:", origin);
+const isAllowedOrigin = (origin: string | undefined) => {
+  if (!origin) {
+    return true;
+  }
 
-      if (!origin) {
-        return callback(null, true);
-      }
+  if (allowedOrigins.includes(origin)) {
+    return true;
+  }
 
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
+  return /^(https?:\/\/)([\w.-]+\.)?(vercel\.app|app\.github\.dev)$/i.test(origin);
+};
 
-      return callback(null, false);
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: [
-      "Content-Type",
-      "Authorization",
-      "authToken",
-    ],
-  })
-);
+const corsOptions = {
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    if (isAllowedOrigin(origin)) {
+      return callback(null, true);
+    }
+
+    console.warn("Blocked CORS origin:", origin);
+    return callback(null, false);
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "authToken"],
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 app.get("/", (req : Request , res : Response)=>{  
     res.status(200).json({ success : true, message : "MediBridge Server running..."})
 })
