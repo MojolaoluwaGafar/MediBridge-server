@@ -51,7 +51,6 @@ const corsOptions = {
     allowedHeaders: ["Content-Type", "Authorization", "authToken"],
 };
 app.use((0, cors_1.default)(corsOptions));
-app.options("*", (0, cors_1.default)(corsOptions));
 app.get("/", (req, res) => {
     res.status(200).json({ success: true, message: "MediBridge Server running..." });
 });
