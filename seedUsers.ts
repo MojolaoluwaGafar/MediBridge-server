@@ -27,7 +27,7 @@ async function seedUsers() {
             LastName: "Jacob",
             Email: "Jacobmeg970@gmail.com",
             PhoneNumber: "07031047842",
-            RegisteredNumber: "RN011",
+            RegisteredNumber: "07031047842",
             role: "user",
             isActive: false,
         },
