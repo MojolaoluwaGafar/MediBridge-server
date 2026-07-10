@@ -11,26 +11,26 @@ async function seedUsers() {
     });
 
     const users = [
-        // {
-        //     UserId: "P003",
-        //     FirstName: "Timi",
-        //     LastName: "Gafar",
-        //     Email: "mojolaoluwa1212@gmail.com",
-        //     PhoneNumber: "07086440726",
-        //     RegisteredNumber: "RN003",
-        //     role: "user",
-        //     isActive: false,
-        // },
         {
-            UserId: "P011",
-            FirstName: "Margret",
-            LastName: "Jacob",
-            Email: "Jacobmeg970@gmail.com",
-            PhoneNumber: "07031047842",
-            RegisteredNumber: "07031047842",
+            UserId: "P012",
+            FirstName: "Timi",
+            LastName: "Gafar",
+            Email: "Only1maniac007@gmail.com.com",
+            PhoneNumber: "07086440726",
+            RegisteredNumber: "07086440726",
             role: "user",
             isActive: false,
         },
+        // {
+        //     UserId: "P011",
+        //     FirstName: "Margret",
+        //     LastName: "Jacob",
+        //     Email: "Jacobmeg970@gmail.com",
+        //     PhoneNumber: "07031047842",
+        //     RegisteredNumber: "07031047842",
+        //     role: "user",
+        //     isActive: false,
+        // },
     ];
     await User.insertMany(users);
     console.log("Users pre‑registered successfully!");
