@@ -19,8 +19,7 @@ async function seedUsers() {
             PhoneNumber: "07086440726",
             RegisteredNumber: "07086440726",
             role: "user",
-            Password: "Password123",
-            isActive: true,
+            isActive: false,
         },
         {
             UserId: "P011",
@@ -30,8 +29,7 @@ async function seedUsers() {
             PhoneNumber: "07031047842",
             RegisteredNumber: "07031047842",
             role: "user",
-            Password: "Password123",
-            isActive: true,
+            isActive: false,
         },
     ];
     await User.insertMany(users);
