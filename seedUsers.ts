@@ -15,7 +15,7 @@ async function seedUsers() {
             UserId: "P012",
             FirstName: "Timi",
             LastName: "Gafar",
-            Email: "Only1maniac007@gmail.com.com",
+            Email: "Only1maniac007@gmail.com",
             PhoneNumber: "07086440726",
             RegisteredNumber: "07086440726",
             role: "user",
