@@ -11,8 +11,8 @@ export interface IUser extends Document {
   Password?: string;
   role: "user" | "doctor" | "admin";
   isActive : boolean;
-  activationCode : string | null;
-  activationCodeExpires : Date | null;
+  activationCode? : string | null;
+  activationCodeExpires? : Date | null;
 }
 
 const UserSchema: Schema<IUser> = new Schema<IUser>({

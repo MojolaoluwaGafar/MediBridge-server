@@ -19,6 +19,7 @@ async function seedUsers() {
             PhoneNumber: "07086440726",
             RegisteredNumber: "07086440726",
             role: "user",
+            Password: "Password123",
             isActive: true,
         },
         {
@@ -29,6 +30,7 @@ async function seedUsers() {
             PhoneNumber: "07031047842",
             RegisteredNumber: "07031047842",
             role: "user",
+            Password: "Password123",
             isActive: true,
         },
     ];
