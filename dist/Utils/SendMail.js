@@ -8,18 +8,27 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const nodemailer_1 = __importDefault(require("nodemailer"));
 dotenv_1.default.config();
 const createTransporter = () => {
-    const service = (process.env.EMAIL_SERVICE || "gmail").trim();
     const user = process.env.APP_EMAIL?.trim();
     const pass = process.env.APP_PASSWORD?.replace(/\s+/g, "").trim();
+    const host = process.env.SMTP_HOST?.trim() || "smtp.gmail.com";
+    const port = Number(process.env.SMTP_PORT || 587);
+    const secure = process.env.SMTP_SECURE === "true";
     if (!user || !pass) {
         throw new Error("Email credentials are not configured.");
     }
     return nodemailer_1.default.createTransport({
-        service,
+        host,
+        port,
+        secure,
         auth: {
             user,
             pass,
         },
+        requireTLS: true,
+        connectionTimeout: 10000,
+        greetingTimeout: 10000,
+        socketTimeout: 10000,
+        family: 4,
     });
 };
 const SendEmail = async ({ to, subject, html }) => {
@@ -36,6 +45,12 @@ const SendEmail = async ({ to, subject, html }) => {
     }
     catch (error) {
         console.error("Email failed to send:", error.message);
+        if (error?.code) {
+            console.error("SMTP code:", error.code);
+        }
+        if (error?.response) {
+            console.error("SMTP response:", error.response);
+        }
         throw new Error("Failed to send email.");
     }
 };
