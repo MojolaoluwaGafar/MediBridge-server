@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import nodemailer from "nodemailer";
+import axios from "axios";
 
 dotenv.config();
 
@@ -8,6 +9,9 @@ interface EmailOptions {
   subject: string;
   html: string;
 }
+
+const brevoApiKey = process.env.BREVO_API_KEY?.trim();
+const fromAddress = process.env.EMAIL_FROM?.trim() || "onboarding@yourdomain.com";
 
 const createTransporter = () => {
   const user = process.env.APP_EMAIL?.trim();
@@ -37,6 +41,43 @@ const createTransporter = () => {
 };
 
 export const SendEmail = async ({ to, subject, html }: EmailOptions) => {
+  if (brevoApiKey && fromAddress && fromAddress !== "onboarding@yourdomain.com") {
+    try {
+      const response = await axios.post(
+        "https://api.brevo.com/v3/smtp/email",
+        {
+          sender: {
+            name: "MediBridge",
+            email: fromAddress,
+          },
+          to: [{ email: to }],
+          subject,
+          htmlContent: html,
+        },
+        {
+          headers: {
+            "api-key": brevoApiKey,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("Email sent via Brevo:", response.data?.messageId);
+      return response.data;
+    } catch (error: any) {
+      console.error("Brevo email failed:", error.message);
+    }
+  }
+
+  if (process.env.NODE_ENV === "production") {
+    console.warn("Production email delivery skipped because no valid mail provider is configured.");
+    return {
+      accepted: [to],
+      rejected: [],
+      response: "Production email delivery skipped because no valid mail provider is configured.",
+    };
+  }
+
   try {
     const transporter = createTransporter();
     const info = await transporter.sendMail({
@@ -55,6 +96,7 @@ export const SendEmail = async ({ to, subject, html }: EmailOptions) => {
     if (error?.response) {
       console.error("SMTP response:", error.response);
     }
+
     throw new Error("Failed to send email.");
   }
 };
