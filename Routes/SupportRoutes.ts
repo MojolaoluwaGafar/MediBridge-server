@@ -1,9 +1,8 @@
 import { Router } from "express";
-import { authMiddleware } from "../middlewares/Auth";
 import { sendMessage } from "../controller/SupportController";
 
 const router = Router();
 
-router.post("/aiChat", authMiddleware, sendMessage);
+router.post("/aiChat", sendMessage);
 
 export default router;
