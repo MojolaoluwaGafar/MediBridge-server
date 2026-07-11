@@ -141,8 +141,17 @@ const SetPassword = async (req, res) => {
             });
         }
         const data = parsed.data;
-        const { password } = data;
-        const user = await User_1.User.findById(req.user?.id);
+        const { password, email, Email, UserId } = data;
+        let user = null;
+        if (req.user?.id) {
+            user = await User_1.User.findById(req.user.id);
+        }
+        else if (email || Email) {
+            user = await User_1.User.findOne({ Email: email || Email });
+        }
+        else if (UserId) {
+            user = await User_1.User.findOne({ UserId });
+        }
         if (!user) {
             return res.status(404).json({
                 error: "Patient not found"
@@ -280,8 +289,11 @@ const verifyRecoveryCode = async (req, res) => {
                 })),
             });
         }
-        const { code } = parsed.data;
-        const user = await User_1.User.findOne({ activationCode: code });
+        const { code, email, Email } = parsed.data;
+        const user = await User_1.User.findOne({
+            activationCode: code,
+            ...(email || Email ? { Email: email || Email } : {}),
+        });
         if (!user) {
             return res.status(404).json({ error: "Invalid code" });
         }
@@ -316,13 +328,17 @@ const resetPassword = async (req, res) => {
             });
         }
         const data = parsed.data;
-        const { password } = data;
-        if (!req.user) {
-            return res.status(401).json({
-                error: "Unauthorized"
-            });
+        const { password, email, Email, UserId } = data;
+        let user = null;
+        if (req.user?.id) {
+            user = await User_1.User.findById(req.user.id);
         }
-        const user = await User_1.User.findById(req.user.id);
+        else if (email || Email) {
+            user = await User_1.User.findOne({ Email: email || Email });
+        }
+        else if (UserId) {
+            user = await User_1.User.findOne({ UserId });
+        }
         if (!user) {
             return res.status(404).json({
                 error: "User not found"

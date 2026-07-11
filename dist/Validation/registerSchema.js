@@ -21,7 +21,10 @@ exports.setPasswordSchema = zod_1.z.object({
     password: zod_1.z.string().min(1, "Password is required"),
     terms: zod_1.z.boolean().refine(val => val === true, {
         message: "You must agree to the Terms and Privacy Policy",
-    }),
+    }).optional(),
+    email: zod_1.z.string().email("Invalid email address").optional(),
+    Email: zod_1.z.string().email("Invalid email address").optional(),
+    UserId: zod_1.z.string().optional(),
 });
 exports.loginSchema = zod_1.z.object({
     UserId: zod_1.z.string().min(1, "User ID is required"),
@@ -35,6 +38,9 @@ exports.resetPasswordSchema = zod_1.z.object({
         .string()
         .min(8, "Password must be at least 8 characters"),
     confirmPassword: zod_1.z.string(),
+    email: zod_1.z.string().email("Invalid email address").optional(),
+    Email: zod_1.z.string().email("Invalid email address").optional(),
+    UserId: zod_1.z.string().optional(),
 }).refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
