@@ -6,10 +6,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SendEmail = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 const nodemailer_1 = __importDefault(require("nodemailer"));
-const axios_1 = __importDefault(require("axios"));
+const brevo_1 = require("@getbrevo/brevo");
 dotenv_1.default.config();
 const brevoApiKey = process.env.BREVO_API_KEY?.trim();
 const fromAddress = process.env.EMAIL_FROM?.trim() || "onboarding@yourdomain.com";
+const brevoClient = brevoApiKey
+    ? new brevo_1.BrevoClient({ apiKey: brevoApiKey })
+    : null;
 const createTransporter = () => {
     const user = process.env.APP_EMAIL?.trim();
     const pass = process.env.APP_PASSWORD?.replace(/\s+/g, "").trim();
@@ -35,24 +38,19 @@ const createTransporter = () => {
     });
 };
 const SendEmail = async ({ to, subject, html }) => {
-    if (brevoApiKey && fromAddress && fromAddress !== "onboarding@yourdomain.com") {
+    if (brevoClient && fromAddress && fromAddress !== "onboarding@yourdomain.com") {
         try {
-            const response = await axios_1.default.post("https://api.brevo.com/v3/smtp/email", {
+            await brevoClient.transactionalEmails.sendTransacEmail({
                 sender: {
-                    name: "MediBridge",
                     email: fromAddress,
+                    name: "MediBridge",
                 },
                 to: [{ email: to }],
                 subject,
                 htmlContent: html,
-            }, {
-                headers: {
-                    "api-key": brevoApiKey,
-                    "Content-Type": "application/json",
-                },
             });
-            console.log("Email sent via Brevo:", response.data?.messageId);
-            return response.data;
+            console.log("Email sent via Brevo");
+            return { accepted: [to], rejected: [], response: "Email sent via Brevo" };
         }
         catch (error) {
             console.error("Brevo email failed:", error.message);

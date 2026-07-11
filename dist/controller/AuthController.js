@@ -77,13 +77,17 @@ const verifyCode = async (req, res) => {
             });
         }
         const data = parsed.data;
-        const { code } = data;
-        if (!req.user) {
-            return res.status(401).json({
-                error: "Unauthorized"
-            });
+        const { code, email, Email, UserId } = data;
+        let user = null;
+        if (req.user?.id) {
+            user = await User_1.User.findById(req.user.id);
         }
-        const user = await User_1.User.findById(req.user.id);
+        else if (email || Email) {
+            user = await User_1.User.findOne({ Email: email || Email });
+        }
+        else if (UserId) {
+            user = await User_1.User.findOne({ UserId });
+        }
         if (!user) {
             return res.status(404).json({
                 error: "Patient not found"

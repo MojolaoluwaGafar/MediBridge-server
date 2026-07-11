@@ -83,15 +83,18 @@ export const verifyCode = async (req : AuthRequest, res : Response) => {
         }
 
         const data : VerifyCodeInput = parsed.data;
-        const { code } = data
+        const { code, email, Email, UserId } = data
 
-        if (!req.user) {
-            return res.status(401).json({
-                error : "Unauthorized"
-            })
+        let user = null;
+
+        if (req.user?.id) {
+            user = await User.findById(req.user.id);
+        } else if (email || Email) {
+            user = await User.findOne({ Email: email || Email });
+        } else if (UserId) {
+            user = await User.findOne({ UserId });
         }
 
-        const user = await User.findById(req.user.id)
         if (!user) {
             return res.status(404).json({
                 error : "Patient not found"

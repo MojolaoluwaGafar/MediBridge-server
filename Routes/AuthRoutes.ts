@@ -5,10 +5,10 @@ import { authMiddleware } from "../middlewares/Auth"
 const router = express.Router()
 
 router.post("/verifyUser", VerifyUser)
-router.post("/verifyCode", authMiddleware, verifyCode)
+router.post("/verifyCode", verifyCode)
 router.post("/setPassword" ,authMiddleware, SetPassword)
 router.post("/login", login)
 router.post("/codeReq", ForgotPassword)
-router.post("/verifyRecoveryCode",authMiddleware, verifyRecoveryCode)
+router.post("/verifyRecoveryCode", verifyRecoveryCode)
 
 export default router;

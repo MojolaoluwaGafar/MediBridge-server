@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import nodemailer from "nodemailer";
-import axios from "axios";
+import { BrevoClient } from "@getbrevo/brevo";
 
 dotenv.config();
 
@@ -12,6 +12,9 @@ interface EmailOptions {
 
 const brevoApiKey = process.env.BREVO_API_KEY?.trim();
 const fromAddress = process.env.EMAIL_FROM?.trim() || "onboarding@yourdomain.com";
+const brevoClient = brevoApiKey
+  ? new BrevoClient({ apiKey: brevoApiKey })
+  : null;
 
 const createTransporter = () => {
   const user = process.env.APP_EMAIL?.trim();
@@ -41,29 +44,20 @@ const createTransporter = () => {
 };
 
 export const SendEmail = async ({ to, subject, html }: EmailOptions) => {
-  if (brevoApiKey && fromAddress && fromAddress !== "onboarding@yourdomain.com") {
+  if (brevoClient && fromAddress && fromAddress !== "onboarding@yourdomain.com") {
     try {
-      const response = await axios.post(
-        "https://api.brevo.com/v3/smtp/email",
-        {
-          sender: {
-            name: "MediBridge",
-            email: fromAddress,
-          },
-          to: [{ email: to }],
-          subject,
-          htmlContent: html,
+      await brevoClient.transactionalEmails.sendTransacEmail({
+        sender: {
+          email: fromAddress,
+          name: "MediBridge",
         },
-        {
-          headers: {
-            "api-key": brevoApiKey,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+        to: [{ email: to }],
+        subject,
+        htmlContent: html,
+      });
 
-      console.log("Email sent via Brevo:", response.data?.messageId);
-      return response.data;
+      console.log("Email sent via Brevo");
+      return { accepted: [to], rejected: [], response: "Email sent via Brevo" };
     } catch (error: any) {
       console.error("Brevo email failed:", error.message);
     }

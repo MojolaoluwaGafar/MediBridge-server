@@ -13,6 +13,9 @@ exports.verifyCodeSchema = zod_1.z.object({
         .string()
         .length(6, "Code must be exactly 6 digits")
         .regex(/^\d+$/, "Code must contain only numbers"),
+    email: zod_1.z.string().email("Invalid email address").optional(),
+    Email: zod_1.z.string().email("Invalid email address").optional(),
+    UserId: zod_1.z.string().optional(),
 });
 exports.setPasswordSchema = zod_1.z.object({
     password: zod_1.z.string().min(1, "Password is required"),

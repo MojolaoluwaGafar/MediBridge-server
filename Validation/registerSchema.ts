@@ -14,6 +14,9 @@ export const verifyCodeSchema = z.object({
     .string()
     .length(6, "Code must be exactly 6 digits")
     .regex(/^\d+$/, "Code must contain only numbers"),
+  email: z.string().email("Invalid email address").optional(),
+  Email: z.string().email("Invalid email address").optional(),
+  UserId: z.string().optional(),
 });
 
 export type VerifyCodeInput = z.infer<typeof verifyCodeSchema>;
