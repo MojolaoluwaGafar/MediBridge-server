@@ -142,12 +142,13 @@ const SetPassword = async (req, res) => {
         }
         const data = parsed.data;
         const { password, email, Email, UserId } = data;
+        const normalizedEmail = (email || Email || "").trim().toLowerCase();
         let user = null;
         if (req.user?.id) {
             user = await User_1.User.findById(req.user.id);
         }
-        else if (email || Email) {
-            user = await User_1.User.findOne({ Email: email || Email });
+        else if (normalizedEmail) {
+            user = await User_1.User.findOne({ Email: normalizedEmail });
         }
         else if (UserId) {
             user = await User_1.User.findOne({ UserId });
@@ -329,12 +330,13 @@ const resetPassword = async (req, res) => {
         }
         const data = parsed.data;
         const { password, email, Email, UserId } = data;
+        const normalizedEmail = (email || Email || "").trim().toLowerCase();
         let user = null;
         if (req.user?.id) {
             user = await User_1.User.findById(req.user.id);
         }
-        else if (email || Email) {
-            user = await User_1.User.findOne({ Email: email || Email });
+        else if (normalizedEmail) {
+            user = await User_1.User.findOne({ Email: normalizedEmail });
         }
         else if (UserId) {
             user = await User_1.User.findOne({ UserId });

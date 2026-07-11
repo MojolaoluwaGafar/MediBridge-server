@@ -153,13 +153,14 @@ export const SetPassword = async (req : AuthRequest, res : Response) => {
 
         const data : SetPasswordInput =  parsed.data
         const { password, email, Email, UserId } = data
+        const normalizedEmail = (email || Email || "").trim().toLowerCase();
 
         let user = null;
 
         if (req.user?.id) {
             user = await User.findById(req.user.id);
-        } else if (email || Email) {
-            user = await User.findOne({ Email: email || Email });
+        } else if (normalizedEmail) {
+            user = await User.findOne({ Email: normalizedEmail });
         } else if (UserId) {
             user = await User.findOne({ UserId });
         }
@@ -353,13 +354,14 @@ export const resetPassword = async (req : AuthRequest, res : Response) => {
 
         const data : ResetPasswordInput = parsed.data;
         const { password, email, Email, UserId } = data;
+        const normalizedEmail = (email || Email || "").trim().toLowerCase();
 
         let user = null;
 
         if (req.user?.id) {
             user = await User.findById(req.user.id);
-        } else if (email || Email) {
-            user = await User.findOne({ Email: email || Email });
+        } else if (normalizedEmail) {
+            user = await User.findOne({ Email: normalizedEmail });
         } else if (UserId) {
             user = await User.findOne({ UserId });
         }
