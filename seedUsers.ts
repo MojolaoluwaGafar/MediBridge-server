@@ -12,12 +12,12 @@ async function seedUsers() {
 
     const users = [
         {
-            UserId: "P012",
-            FirstName: "Timi",
-            LastName: "Gafar",
-            Email: "Only1maniac007@gmail.com",
-            PhoneNumber: "07086440726",
-            RegisteredNumber: "07086440726",
+            UserId: "P015",
+            FirstName: "Betti",
+            LastName: "Andrew",
+            Email: "Bettilizandrew@gmail.com",
+            PhoneNumber: "09011881701",
+            RegisteredNumber: "09011881701",
             role: "user",
             isActive: false,
         },
