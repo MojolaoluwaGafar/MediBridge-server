@@ -31,6 +31,7 @@ async function seedUsers() {
         //     role: "user",
         //     isActive: false,
         // },
+        
     ];
     await User.insertMany(users);
     console.log("Users pre‑registered successfully!");
